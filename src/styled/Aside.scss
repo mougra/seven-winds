@@ -1,5 +1,5 @@
 .aside {
-  width: 234px;
+  width: 210px;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
@@ -8,15 +8,16 @@
 
   color: #a1a1aa;
 
+  height: calc(100vh - 45px);
   border-right: 1px solid #414144;
 
   .aside-select {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin: 8px 7px 8px 0;
+    margin: 6px 7px 6px 0;
     justify-content: space-between;
-    position: relative;
+    // position: relative;
 
     .select-subtitle {
       font-size: 10px;
@@ -34,14 +35,14 @@
     }
   }
 
-  .aside-select::after {
-    position: absolute;
-    content: '';
-    bottom: -8px;
-    right: -7px;
-    width: 100vw;
-    border-bottom: 1px solid #414144;
-  }
+  // .aside-select::after {
+  //   position: absolute;
+  //   content: '';
+  //   bottom: -8px;
+  //   left: -7px;
+  //   width: 100vw;
+  //   border-bottom: 1px solid #414144;
+  // }
 
   .nav-container {
     padding: 8px 22px;

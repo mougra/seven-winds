@@ -6,19 +6,19 @@
   line-height: 16px;
 
   text-decoration: none;
-
   color: #a1a1aa;
   background: #27272a;
-
   text-decoration: none;
+
+  position: relative;
 
   border-bottom: 1px solid #414144;
 
   .wrapper {
     margin: 0 auto;
     width: 100%;
-    max-width: 1872px;
-    padding: 0 24px;
+    max-width: 1896px;
+    padding: 0 0 0 24px;
     height: 44px;
   }
 
@@ -28,6 +28,7 @@
     gap: 30px;
     align-items: center;
     height: 100%;
+    position: relative;
   }
 
   .active-link {
@@ -38,13 +39,23 @@
   .active-link:after {
     position: absolute;
     content: '';
-    bottom: -15px;
+    bottom: -14px;
     left: -4px;
     width: 110%;
     border-bottom: 2px solid #ffffff;
   }
+
   .noactive-link {
     color: #a1a1aa;
     text-decoration: none;
   }
+}
+
+.header::after {
+  position: absolute;
+  content: '';
+  bottom: -44px;
+  left: 0;
+  width: 100vw;
+  border-bottom: 1px solid #414144;
 }

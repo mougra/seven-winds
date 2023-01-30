@@ -1,28 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ServerEntity } from '../../models/models'
+import { IList } from './../../models/models'
 
-interface CharacterState {
+interface ListState {
   loading: boolean
   error: string
-  // responseEntity: {
-  // eID: number
-  // rowName: string
-  // }
-  eID: number
-  rowName: string
-  // characters: ICharacter[]
+  lists: IList[]
 }
 
-const initialState: CharacterState = {
+const initialState: ListState = {
   loading: false,
   error: '',
-  // responseEntity: {
-  //   eID: 0,
-  //   rowName: '',
-  // },
-  eID: 0,
-  rowName: '',
-  // characters: [],
+  lists: [],
 }
 
 export const entitySlice = createSlice({
@@ -32,10 +20,9 @@ export const entitySlice = createSlice({
     fetching(state: any) {
       state.loading = true
     },
-    fetchSuccess(state: any, action: PayloadAction<ServerEntity>) {
+    fetchSuccess(state: any, action: PayloadAction<IList>) {
       state.loading = false
-      state.eID = action.payload.id
-      state.rowName = action.payload.rowName
+      state.lists = action.payload
       state.error = ''
     },
     fetchError(state: any, action: PayloadAction<Error>) {
