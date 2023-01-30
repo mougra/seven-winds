@@ -26,7 +26,7 @@ export const fetchEntity = () => {
     materials: 0,
     mimExploitation: 0,
     overheads: 0,
-    parentId: null,
+    parentId: 25595,
     rowName: 'asdasdasdasad',
     salary: 0,
     supportCosts: 0,
@@ -40,21 +40,19 @@ export const fetchEntity = () => {
   return async (dispatch: AppDispatch) => {
     try {
       dispatch(entitySlice.actions.fetching())
-      // const responseEntity = await axios.post<ServerEntity>(
-      //   '/v1/outlay-rows/entity/create'
-      // )
-      // dispatch(entitySlice.actions.fetchSuccess(responseEntity.data))
 
-      // const qwe = await axios.get<any>(
-      //   // `/v1/outlay-rows/entity/${responseEntity.data.id}/row/list`
-      //   `/v1/outlay-rows/entity/${eID}/row/list`
-      // )
-
-      const qwe = await axios.post<any>(
-        // `/v1/outlay-rows/entity/${responseEntity.data.id}/row/list`
-        `/v1/outlay-rows/entity/${eID}/row/create`,
-        DATA
+      //////////////////
+      const responseEntity = await axios.post<ServerEntity>(
+        '/v1/outlay-rows/entity/create'
       )
+      /////////////////////////////
+      dispatch(entitySlice.actions.fetchSuccess(responseEntity.data))
+      const qwe = await axios.get<any>(`/v1/outlay-rows/entity/${eID}/row/list`)
+
+      // const qwe = await axios.post<any>(
+      //   `/v1/outlay-rows/entity/${eID}/row/create`,
+      //   DATA
+      // )
       console.log(qwe)
     } catch (e) {
       dispatch(entitySlice.actions.fetchError(e as Error))

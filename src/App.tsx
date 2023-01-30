@@ -2,28 +2,25 @@ import './App.scss'
 
 import { Route, Routes } from 'react-router-dom'
 
-import Header from './components/Navigation'
-// import Main from './components/Main'
+import Header from './components/Header'
 import NotFound from './pages/NotFound'
 import CMPPage from './pages/CMPPage'
+import Aside from './components/Aside'
+import Other from './pages/Other'
 
 function App() {
   return (
     <>
       <Header />
-
-      <Routes>
-        {/* <Route
-            path='/'
-            element={
-              <HomePage countries={countries} setCountries={setCountries} />
-            }
-          ></Route> */}
-        <Route path='/' element={<CMPPage />} />
-        <Route path='*' element={<NotFound />} />
-
-        {/* <Route path='/country/:name' element={<Detail />} /> */}
-      </Routes>
+      <div className='app'>
+        <Aside />
+        <Routes>
+          <Route path='/' element={<CMPPage />} />
+          <Route path='/other' element={<Other />} />
+          <Route path='/control' element={<Other />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </div>
     </>
   )
 }
