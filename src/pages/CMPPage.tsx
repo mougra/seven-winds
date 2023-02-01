@@ -40,67 +40,77 @@ function CMP() {
   //   <div className='table-info'>{1}</div>,
   // ]
 
-  const Wrap = (props: LineProps) => {
-    let line = [<div className='table-info'>{props.props.rowName}</div>]
-
-    function wraps1(props: IList) {
-      console.log('props', props)
-
-      for (let i = 0; i < props.total; i++) {
-        line.push(<div className='table-info'>{props.child[i].rowName}</div>)
-      }
-    }
-
-    function wraps(props: LineProps) {
-      for (let i = 0; i < props.props.total; i++) {
-        line.push(
-          <div className='table-info'>{props.props.child[i].rowName}</div>
-        )
-        // {`table-info${i}`}
-
-        if (props.props.child[i].total > 0) {
-          // wraps(props.props.child[i])
-          console.log(props.props.child[i])
-          wraps1(props.props.child[i])
-        }
-      }
-      return line
-    }
-
-    wraps(props)
-
-    return <>{line}</>
-  }
-
   // const Wrap = (props: LineProps) => {
-  //   let line = <div className='table-info'>{props.props.rowName}</div>
-  //   let lineChild: any = []
+  //   let line = [<div className='table-info'>{props.props.rowName}</div>]
+  //   function wraps1(props: IList) {
+  //     console.log('props', props)
+
+  //     for (let i = 0; i < props.total; i++) {
+  //       line.push(<div className='table-info'>{props.child[i].rowName}</div>)
+  //     }
+  //   }
   //   function wraps(props: LineProps) {
   //     for (let i = 0; i < props.props.total; i++) {
-  //       lineChild[i] = (
+  //       line.push(
   //         <div className='table-info'>{props.props.child[i].rowName}</div>
-  //         // {`table-info${i}`}
   //       )
-  //       // if (props.props.child[i].total > 0) {
-  //       //   wraps(props.props.child[i])
-  //       // }
+  //       // {`table-info${i}`}
+
+  //       if (props.props.child[i].total > 0) {
+  //         // wraps(props.props.child[i])
+  //         console.log(props.props.child[i])
+  //         wraps1(props.props.child[i])
+  //       }
   //     }
-  //     return lineChild
+  //     return line
   //   }
-  //   if (props.props.total > 0) {
-  //     wraps(props)
-  //   }
-  //   if (props.props.total > 0) {
-  //     console.log(props.props.child)
-  //     console.log('Infinity', props.props.child.flat(Infinity))
-  //   }
-  //   return (
-  //     <>
-  //       {line}
-  //       {lineChild}
-  //     </>
-  //   )
+  //   wraps(props)
+  //   return <>{line}</>
   // }
+
+  //////////////////////////
+
+  const Wrap = (props: LineProps) => {
+    let level = 0
+    let line = [
+      <div key={props.props.id} className='table-info'>
+        <div className='table-level'>{props.props.id}</div>
+        <div className='table-namework'>{props.props.rowName}</div>
+        <div className='table-3'>{props.props.salary}</div>
+        <div className='table-4'>{props.props.equipmentCosts}</div>
+        <div className='table-5'>{props.props.overheads}</div>
+        <div className='table-6'>{props.props.estimatedProfit}</div>
+      </div>,
+    ]
+    for (let i = 0; i < props.props.total; i++) {
+      getProp(props.props.child[i])
+      level--
+    }
+
+    function getProp(o: any) {
+      level++
+
+      line.push(
+        <div key={o.id} className='table-info'>
+          <div className='table-level'>{o.id}</div>
+          <div className='table-namework'>{o.rowName}</div>
+          <div className='table-3'>{o.salary}</div>
+          <div className='table-4'>{o.equipmentCosts}</div>
+          <div className='table-5'>{o.overheads}</div>
+          <div className='table-6'>{o.estimatedProfit}</div>
+        </div>
+      )
+      if (o.child.length > 0) {
+        for (let i = 0; i < o.child.length; i++) {
+          getProp(o.child[i])
+          level--
+        }
+      }
+
+      return line
+    }
+    return <>{line}</>
+  }
 
   return (
     <>

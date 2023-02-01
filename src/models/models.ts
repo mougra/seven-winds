@@ -8,7 +8,7 @@ export interface IList {
   materials: number
   mimExploitation: number
   overheads: number
-  parentId: any
+  parentId: null
   rowName: string
   salary: number
   supportCosts: number
