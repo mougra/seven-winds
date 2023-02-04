@@ -16,7 +16,7 @@ function Aside() {
           <Projecte text='По проекту' link='/other' />
           <Projecte text='Объекты' link='/other' />
           <Projecte text='РД' link='/other' />
-          <Projecte text='МТО' link='/other' />
+          <Projecte text='МТО' link='/qwert' />
           <Projecte text='СМР' link='/' />
           <Projecte text='График' link='/other' />
           <Projecte text='МиМ' link='/other' />

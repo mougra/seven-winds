@@ -18,6 +18,7 @@ export const fetchEntity = () => {
   //   supportCosts: 0,
   // }
   // let DATAJSON = JSON.stringify(DATA)
+  // console.log('Запрос на серв')
 
   const eID = 33245
   return async (dispatch: AppDispatch) => {
@@ -38,7 +39,7 @@ export const fetchEntity = () => {
       //   `/v1/outlay-rows/entity/${eID}/row/create`,
       //   DATA
       // )
-      console.log(responseEntityList.data)
+      // console.log(responseEntityList.data)
       dispatch(entitySlice.actions.fetchSuccess(responseEntityList.data))
     } catch (e) {
       dispatch(entitySlice.actions.fetchError(e as Error))

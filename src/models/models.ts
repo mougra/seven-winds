@@ -8,11 +8,12 @@ export interface IList {
   materials: number
   mimExploitation: number
   overheads: number
-  parentId: null
+  parentId?: null | number
   rowName: string
   salary: number
   supportCosts: number
   total: number
+  level: number
 }
 
 // export interface ServerResponse<T> {
