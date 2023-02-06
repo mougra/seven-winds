@@ -3,22 +3,10 @@ import axios from '../../axios'
 import { IList } from './../../models/models'
 import { entitySlice } from '../slices/entitySlice'
 
+const eID = 33245
+
 export const fetchEntity = () => {
-  // const DATA: IList = {
-  //   equipmentCosts: 124123,
-  //   estimatedProfit: 34523452345,
-  //   machineOperatorSalary: 0,
-  //   mainCosts: 0,
-  //   materials: 0,
-  //   mimExploitation: 0,
-  //   overheads: 0,
-  //   parentId: 25595,
-  //   rowName: 'asdasdasdasad',
-  //   salary: 0,
-  //   supportCosts: 0,
-  // }
-  // let DATAJSON = JSON.stringify(DATA)
-  // console.log('Запрос на серв')
+  console.log('Запрос на серв, получение данных')
 
   const eID = 33245
   return async (dispatch: AppDispatch) => {
@@ -47,13 +35,18 @@ export const fetchEntity = () => {
   }
 }
 
-// export const fetchEntityList = () => {
-//   return async (dispatch: AppDispatch) => {
-//     try {
+export const updateRow = (DATA: any) => {
+  console.log('Запрос на серв, обновление данных')
 
-//       dispatch(entitySlice.actions.fetchSuccess(responseEntity.data))
-//     } catch (e) {
-//       dispatch(entitySlice.actions.fetchError(e as Error))
-//     }
-//   }
-// }
+  return async (dispatch: AppDispatch) => {
+    try {
+      const qwe = await axios.post<any>(
+        `/v1/outlay-rows/entity/${eID}/row/${DATA.id}/update`,
+        DATA
+      )
+      console.log(qwe.data)
+    } catch (e) {
+      dispatch(entitySlice.actions.fetchError(e as Error))
+    }
+  }
+}

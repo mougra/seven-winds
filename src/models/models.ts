@@ -1,5 +1,5 @@
 export interface IList {
-  child: any
+  child?: any
   id: number
   equipmentCosts: number
   estimatedProfit: number
@@ -13,7 +13,7 @@ export interface IList {
   salary: number
   supportCosts: number
   total: number
-  level: number
+  level?: number
 }
 
 // export interface ServerResponse<T> {

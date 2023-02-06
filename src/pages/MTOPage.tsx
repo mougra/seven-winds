@@ -12,80 +12,97 @@ function CMP() {
   const dispatch = useAppDispatch()
   const { error, loading, lists } = useAppSelector((state) => state.entity)
   const [isEditMode, setIsEditMode] = useState(false)
+  const [isOpenMode, setIsOpenMode] = useState(false)
   const [rowIDToEdit, setRowIDToEdit] = useState(undefined)
-  const [rowsState, setRowsState] = useState(lists)
-  const [editedRow, setEditedRow] = useState<any | null>(null)
+  // const [rowsState, setRowsState] = useState(lists)
+  // const [editedRow, setEditedRow] = useState<any | null>(null)
 
-  const handleEdit = (rowID: any) => {
-    setIsEditMode(true)
-    setEditedRow(undefined)
-    setRowIDToEdit(rowID)
-  }
+  // const handleEdit = (rowID: any) => {
+  //   setIsEditMode(true)
+  //   setEditedRow(undefined)
+  //   setRowIDToEdit(rowID)
+  // }
 
-  const handleRemoveRow = (rowID: any) => {
-    const newData = rowsState.filter((row) => {
-      return row.id !== rowID ? row : null
-    })
+  // const handleRemoveRow = (rowID: any) => {
+  //   const newData = rowsState.filter((row) => {
+  //     return row.id !== rowID ? row : null
+  //   })
 
-    setRowsState(newData)
-  }
+  //   setRowsState(newData)
+  // }
 
-  const handleOnChangeField = (e: any, rowID: any) => {
-    e.preventDefault()
-    const { name: fieldName, value } = e.target
-    console.log('handleOnChangeField', fieldName, value, rowID)
-    setEditedRow({
-      id: rowID,
-      [fieldName]: value,
-    })
-    console.log('editedRow', editedRow)
-  }
+  // const handleOnChangeField = (e: any, rowID: any) => {
+  //   e.preventDefault()
+  //   const { name: fieldName, value } = e.target
+  //   console.log('handleOnChangeField', fieldName, value, rowID)
+  //   setEditedRow({
+  //     id: rowID,
+  //     [fieldName]: value,
+  //   })
+  //   console.log('editedRow', editedRow)
+  // }
 
-  const handleCancelEditing = () => {
-    setIsEditMode(false)
-    setEditedRow(undefined)
-  }
+  // const handleCancelEditing = () => {
+  //   setIsEditMode(false)
+  //   setEditedRow(undefined)
+  // }
 
-  const handleSaveRowChanges = () => {
-    setTimeout(() => {
-      setIsEditMode(false)
+  // const handleSaveRowChanges = () => {
+  //   setTimeout(() => {
+  //     setIsEditMode(false)
 
-      const newData = rowsState.map((row) => {
-        // console.log('row.id', row.id, '=? editedRow.id', editedRow.id)
-        // console.log('editedRow.rowName', editedRow.rowName)
-        console.log('row do', row)
-        if (row.id === editedRow.id) {
-          if (editedRow.rowName) row.rowName = editedRow.rowName
-          if (editedRow.salary) row.salary = editedRow.salary
-          if (editedRow.equipmentCosts)
-            row.equipmentCosts = editedRow.equipmentCosts
-          if (editedRow.overheads) row.overheads = editedRow.overheads
-          if (editedRow.estimatedProfit)
-            row.estimatedProfit = editedRow.estimatedProfit
-        }
-        // console.log('row.rowName', row.rowName)
-        console.log('row posle', row)
-        return row
-      })
+  //     const newData = rowsState.map((row) => {
+  //       // console.log('row.id', row.id, '=? editedRow.id', editedRow.id)
+  //       // console.log('editedRow.rowName', editedRow.rowName)
+  //       console.log('row do', row)
+  //       if (row.id === editedRow.id) {
+  //         if (editedRow.rowName) row.rowName = editedRow.rowName
+  //         if (editedRow.salary) row.salary = editedRow.salary
+  //         if (editedRow.equipmentCosts)
+  //           row.equipmentCosts = editedRow.equipmentCosts
+  //         if (editedRow.overheads) row.overheads = editedRow.overheads
+  //         if (editedRow.estimatedProfit)
+  //           row.estimatedProfit = editedRow.estimatedProfit
+  //       }
+  //       // console.log('row.rowName', row.rowName)
+  //       console.log('row posle', row)
+  //       return row
+  //     })
 
-      setRowsState(newData)
-      setEditedRow(undefined)
-    }, 1000)
-  }
+  //     setRowsState(newData)
+  //     setEditedRow(undefined)
+  //   }, 1000)
+  // }
 
   useEffect(() => {
     dispatch(fetchEntity())
-    setRowsState(lists)
+    // setRowsState(lists)
     // console.log('rowsState', rowsState)
   }, [])
 
-  const submitmainApp = (event: React.FormEvent) => {
-    event.preventDefault()
-  }
+  const handleRemoveRow = (rowID: any) => {
+    console.log(rowID)
 
-  // interface rowProps {
-  //   props: IList
-  // }
+    // const newData = rowsState.filter((row: any) => {
+    //   return row.id !== rowID ? row : null
+    // })
+
+    // setRowsState(newData)
+  }
+  const handleAddRow = (rowID: any) => {
+    console.log(rowID)
+
+    for (let i = 0; i < State.length; i++) {
+      if (State[i].row.id === rowID) {
+      }
+    }
+
+    // const newData = rowsState.filter((row: any) => {
+    //   return row.id !== rowID ? row : null
+    // })
+
+    // setRowsState(newData)
+  }
 
   function Wrap(props: IList[]) {
     let level = 0
@@ -135,7 +152,7 @@ function CMP() {
     return rowsQ
   }
 
-  let State: any = Wrap(rowsState)
+  let State: any = Wrap(lists)
 
   console.log(State)
 
@@ -143,7 +160,7 @@ function CMP() {
     <>
       <div className='table-main'>
         <h1 className='h1-title'>Строительно-монтажные работы</h1>
-        <div className='table-info'>
+        <div className='table-info-title'>
           <div className='table-level'>Уровень</div>
           <div className='table-namework'>Наименование работ</div>
           <div className='table-3'>Основная з/п</div>
@@ -160,7 +177,19 @@ function CMP() {
               <Line key={list.id} list={list} />
             ))} */}
             {State.map((row: any) => (
-              <Row key={row.row.id} row={row.row} level={row.level} />
+              <Row
+                key={row.row.id}
+                row={row.row}
+                level={row.level}
+                isEditMode={isEditMode}
+                setIsEditMode={setIsEditMode}
+                rowIDToEdit={rowIDToEdit}
+                setRowIDToEdit={setRowIDToEdit}
+                isOpenMode={isOpenMode}
+                setIsOpenMode={setIsOpenMode}
+                handleRemoveRow={handleRemoveRow}
+                handleAddRow={handleAddRow}
+              />
             ))}
             {/* {rowsState.map((row) => (
               <Wrap key={row.id} props={row} />
