@@ -1,10 +1,10 @@
 import '../styled/CMPPage.scss'
 import { IRow, IRows } from '../models/models'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import levelDoc from '../assets/levelDoc.svg'
 import levelDeletesvg from '../assets/levelDeletesvg.svg'
-import { fetchUpdateRow, fetchAddRow } from '../store/actions/characterActions'
-import { useAppDispatch } from '../hook/redux'
+import { fetchUpdateRow } from '../store/actions/characterActions'
+import { useAppDispatch, useAppSelector } from '../hook/redux'
 
 interface ModalProps {
   row: IRows
@@ -30,15 +30,18 @@ function Row({
   handleAddRow,
 }: ModalProps) {
   const dispatch = useAppDispatch()
+  // const { newRow } = useAppSelector((state) => state.entity)
 
   const [rowsState, setRowsState] = useState(row)
-  const [editedRow, setEditedRow] = useState<IRows | undefined>(rowsState)
-  const [deleteRow, setDeleteRow] = useState(false)
+  // const [deleteRow, setDeleteRow] = useState(false)
+  let editedRow: IRows | undefined = rowsState
 
   const handleEdit = (rowID: any) => {
-    setIsEditMode(true)
-    setEditedRow(rowsState)
-    setRowIDToEdit(rowID)
+    if (isEditMode !== true) {
+      setIsEditMode(true)
+      editedRow = rowsState
+      setRowIDToEdit(rowID)
+    }
   }
 
   const handleOnChangeField = (
@@ -48,12 +51,11 @@ function Row({
   ) => {
     event.preventDefault()
 
+    console.log(rowID)
     let { name: fieldName, value } = event.target
     if (fieldName != 'rowName') {
       value = Number(value)
     }
-    // console.log('handleOnChangeField', fieldName, value, rowID)
-    // console.log('editedRow', editedRow)
 
     let rowCopy: IRows = structuredClone(editedRow)
 
@@ -72,11 +74,11 @@ function Row({
     if (fieldName == 'estimatedProfit') {
       rowCopy.row.estimatedProfit = value
     }
-    // if ((rowCopy.isNew = true)) {
-    //   rowCopy.isNew = false
+    // if (rowCopy.row.id === 0) {
+    //   rowCopy.row.id = newRow.id
     // }
 
-    setEditedRow(rowCopy)
+    editedRow = rowCopy
     console.log('editedRow', editedRow)
   }
 
@@ -92,142 +94,136 @@ function Row({
       if (editedRow === undefined) {
         return rowsState
       }
+      if (editedRow.isNew == true) {
+        editedRow.isNew = false
+      }
+      dispatch(fetchUpdateRow(editedRow.row))
 
       setRowsState(editedRow)
-      if (editedRow.isNew == true) {
-        dispatch(fetchAddRow(editedRow.row))
-      } else {
-        dispatch(fetchUpdateRow(editedRow.row))
-      }
 
-      setEditedRow(undefined)
+      editedRow = undefined
       setRowIDToEdit(undefined)
+      // setIsEditMode(false)
+      setIsOpenMode(true)
     }
   }
 
   return (
     <>
-      {!deleteRow && (
-        <div
-          className={
-            rowIDToEdit !== rowsState.row.id
-              ? 'table-info'
-              : 'table-info table-info_active'
-          }
-          onDoubleClick={() => handleEdit(rowsState.row.id)}
-        >
-          {!isOpenMode && !isEditMode ? (
-            <div className='table-level'>
-              <div
-                className={`table-level-container${row.level}`}
-                onMouseLeave={() => setIsOpenMode(true)}
-              >
-                <img
-                  src={levelDoc}
-                  alt='Display card line'
-                  className={`table-img0`}
-                  onClick={() => handleAddRow(rowsState.row.id)}
-                />
-
-                <img
-                  src={levelDeletesvg}
-                  alt='Display card line'
-                  className='table-img0'
-                  onClick={() => handleRemoveRow(rowsState.row.id)}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className='table-level'>
+      <div
+        className={
+          rowIDToEdit !== rowsState.row.id
+            ? 'table-info'
+            : 'table-info table-info_active'
+        }
+        onDoubleClick={() => handleEdit(rowsState.row.id)}
+      >
+        {!isOpenMode && !isEditMode ? (
+          <div className='table-level'>
+            <div
+              className={`table-level-container${row.level}`}
+              onMouseLeave={() => setIsOpenMode(true)}
+            >
               <img
                 src={levelDoc}
                 alt='Display card line'
-                className={`table-img${row.level}`}
-                onMouseEnter={() => setIsOpenMode(false)}
+                className={`table-img0`}
+                onClick={() => handleAddRow(rowsState.row.id)}
+              />
+
+              <img
+                src={levelDeletesvg}
+                alt='Display card line'
+                className='table-img0'
+                onClick={() => handleRemoveRow(rowsState.row.id)}
               />
             </div>
-          )}
-          {(isEditMode && rowIDToEdit === rowsState.row.id) ||
-          rowsState.isNew ? (
-            <input
-              className='table-namework input'
-              type='text'
-              name='rowName'
-              defaultValue={
-                editedRow ? editedRow.row.rowName : rowsState.row.rowName
-              }
-              onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
-              onKeyDown={(e) => handleSaveRowChanges(e)}
+          </div>
+        ) : (
+          <div className='table-level'>
+            <img
+              src={levelDoc}
+              alt='Display card line'
+              className={`table-img${row.level}`}
+              onMouseEnter={() => setIsOpenMode(false)}
             />
-          ) : (
-            <div className='table-namework'>{rowsState.row.rowName}</div>
-          )}
-          {(isEditMode && rowIDToEdit === rowsState.row.id) ||
-          rowsState.isNew ? (
-            <input
-              className='table-3 input'
-              type='number'
-              defaultValue={
-                editedRow ? editedRow.row.salary : rowsState.row.salary
-              }
-              name='salary'
-              onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
-              onKeyDown={(e) => handleSaveRowChanges(e)}
-            />
-          ) : (
-            <div className='table-3'>{rowsState.row.salary}</div>
-          )}
-          {(isEditMode && rowIDToEdit === rowsState.row.id) ||
-          rowsState.isNew ? (
-            <input
-              className='table-4 input'
-              type='number'
-              defaultValue={
-                editedRow
-                  ? editedRow.row.equipmentCosts
-                  : rowsState.row.equipmentCosts
-              }
-              name='equipmentCosts'
-              onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
-              onKeyDown={(e) => handleSaveRowChanges(e)}
-            />
-          ) : (
-            <div className='table-4'>{rowsState.row.equipmentCosts}</div>
-          )}
-          {(isEditMode && rowIDToEdit === rowsState.row.id) ||
-          rowsState.isNew ? (
-            <input
-              className='table-5 input'
-              type='number'
-              defaultValue={
-                editedRow ? editedRow.row.overheads : rowsState.row.overheads
-              }
-              name='overheads'
-              onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
-              onKeyDown={(e) => handleSaveRowChanges(e)}
-            />
-          ) : (
-            <div className='table-5'>{rowsState.row.overheads}</div>
-          )}
-          {(isEditMode && rowIDToEdit === rowsState.row.id) ||
-          rowsState.isNew ? (
-            <input
-              className='table-6 input'
-              type='number'
-              defaultValue={
-                editedRow
-                  ? editedRow.row.estimatedProfit
-                  : rowsState.row.estimatedProfit
-              }
-              name='estimatedProfit'
-              onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
-              onKeyDown={(e) => handleSaveRowChanges(e)}
-            />
-          ) : (
-            <div className='table-6'>{rowsState.row.estimatedProfit}</div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+        {(isEditMode && rowIDToEdit === rowsState.row.id) || rowsState.isNew ? (
+          <input
+            className='table-namework input'
+            type='text'
+            name='rowName'
+            defaultValue={
+              editedRow ? editedRow.row.rowName : rowsState.row.rowName
+            }
+            onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
+            onKeyDown={(e) => handleSaveRowChanges(e)}
+          />
+        ) : (
+          <div className='table-namework'>{rowsState.row.rowName}</div>
+        )}
+        {(isEditMode && rowIDToEdit === rowsState.row.id) || rowsState.isNew ? (
+          <input
+            className='table-3 input'
+            type='number'
+            defaultValue={
+              editedRow ? editedRow.row.salary : rowsState.row.salary
+            }
+            name='salary'
+            onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
+            onKeyDown={(e) => handleSaveRowChanges(e)}
+          />
+        ) : (
+          <div className='table-3'>{rowsState.row.salary}</div>
+        )}
+        {(isEditMode && rowIDToEdit === rowsState.row.id) || rowsState.isNew ? (
+          <input
+            className='table-4 input'
+            type='number'
+            defaultValue={
+              editedRow
+                ? editedRow.row.equipmentCosts
+                : rowsState.row.equipmentCosts
+            }
+            name='equipmentCosts'
+            onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
+            onKeyDown={(e) => handleSaveRowChanges(e)}
+          />
+        ) : (
+          <div className='table-4'>{rowsState.row.equipmentCosts}</div>
+        )}
+        {(isEditMode && rowIDToEdit === rowsState.row.id) || rowsState.isNew ? (
+          <input
+            className='table-5 input'
+            type='number'
+            defaultValue={
+              editedRow ? editedRow.row.overheads : rowsState.row.overheads
+            }
+            name='overheads'
+            onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
+            onKeyDown={(e) => handleSaveRowChanges(e)}
+          />
+        ) : (
+          <div className='table-5'>{rowsState.row.overheads}</div>
+        )}
+        {(isEditMode && rowIDToEdit === rowsState.row.id) || rowsState.isNew ? (
+          <input
+            className='table-6 input'
+            type='number'
+            defaultValue={
+              editedRow
+                ? editedRow.row.estimatedProfit
+                : rowsState.row.estimatedProfit
+            }
+            name='estimatedProfit'
+            onChange={(e) => handleOnChangeField(e, rowsState.row.id)}
+            onKeyDown={(e) => handleSaveRowChanges(e)}
+          />
+        ) : (
+          <div className='table-6'>{rowsState.row.estimatedProfit}</div>
+        )}
+      </div>
     </>
   )
 }

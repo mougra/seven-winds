@@ -8,6 +8,7 @@ import { modifiedEntity } from '../store/slices/modifiedRowsSlice'
 import { IRows, IRow } from '../models/models'
 import RowCopy from '../components/RowCopy'
 import { rowsAdd } from '../store/slices/entitySlice'
+import { fetchUpdateRow, fetchAddRow } from '../store/actions/characterActions'
 
 function Graph() {
   const dispatch = useAppDispatch()
@@ -18,37 +19,10 @@ function Graph() {
   const [isEditMode, setIsEditMode] = useState(false)
   const [isOpenMode, setIsOpenMode] = useState(true)
   const [rowIDToEdit, setRowIDToEdit] = useState<number>(0)
-  // const [state, setState] = useState<IRows[]>(rows)
-
-  // function Wrap(props: IList[]) {
-  //   let level = 0
-  //   let rowsQ: IRows[] = []
-  //   for (let i = 0; i < props.length; i++) {
-  //     getProp(props[i])
-  //     level--
-  //   }
-  //   function getProp(rowsW: IRow) {
-  //     rowsQ.push({ row: rowsW, level: level, isNew: false })
-  //     level++
-  //     if (rowsW.child.length > 0) {
-  //       for (let i = 0; i < rowsW.child.length; i++) {
-  //         getProp(rowsW.child[i])
-  //         level--
-  //       }
-  //     }
-  //     return rowsQ
-  //   }
-  //   return rowsQ
-  // }
 
   useEffect(() => {
     dispatch(fetchEntity())
   }, [])
-  // useEffect(() => {
-  //   setState(rows)
-  //   console.log('state', state)
-  //   console.log('rows', rows)
-  // }, [rows])
 
   const handleRemoveRow = (rowID: any) => {
     console.log(rowID)
@@ -83,9 +57,9 @@ function Graph() {
           level: objCopy[i].level + 1,
           isNew: true,
         })
-        // console.log('objCopy', objCopy)
+        dispatch(fetchAddRow(objCopy[i + 1].row))
+
         dispatch(rowsAdd(objCopy))
-        // setState(objCopy)
       }
     }
   }

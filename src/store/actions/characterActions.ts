@@ -3,7 +3,6 @@ import axios from '../../axios'
 import { IList } from './../../models/models'
 import { entitySlice } from '../slices/entitySlice'
 import { IRows, IRow } from '../../models/models'
-import { useAppSelector } from '../../hook/redux'
 
 const eID = 33245
 
@@ -54,7 +53,7 @@ export const fetchEntity = () => {
   }
 }
 
-export const fetchUpdateRow = (DATA: any) => {
+export const fetchUpdateRow = (DATA: IRow) => {
   console.log('Запрос на серв, обновление данных')
 
   return async (dispatch: AppDispatch) => {
@@ -63,14 +62,14 @@ export const fetchUpdateRow = (DATA: any) => {
         `/v1/outlay-rows/entity/${eID}/row/${DATA.id}/update`,
         DATA
       )
-      console.log(qwe.data)
+      dispatch(entitySlice.actions.rowUpdate(qwe.data.current))
     } catch (e) {
       dispatch(entitySlice.actions.fetchError(e as Error))
     }
   }
 }
 
-export const fetchAddRow = (DATA: any) => {
+export const fetchAddRow = (DATA: IRow) => {
   console.log('Запрос на серв, создание строки')
 
   return async (dispatch: AppDispatch) => {
@@ -79,7 +78,8 @@ export const fetchAddRow = (DATA: any) => {
         `/v1/outlay-rows/entity/${eID}/row/create`,
         DATA
       )
-      console.log(qwe.data)
+      console.log(qwe.data.current)
+      dispatch(entitySlice.actions.rowsNew(qwe.data.current))
     } catch (e) {
       dispatch(entitySlice.actions.fetchError(e as Error))
     }
