@@ -16,6 +16,29 @@ export interface IList {
   level?: number
 }
 
+export interface IRow {
+  child?: any
+  id: number
+  equipmentCosts: number
+  estimatedProfit: number
+  machineOperatorSalary: number
+  mainCosts: number
+  materials: number
+  mimExploitation: number
+  overheads: number
+  parentId?: null | number
+  rowName: string
+  salary: number
+  supportCosts: number
+  total: number
+}
+
+export interface IRows {
+  row: IRow
+  level: number
+  isNew?: boolean
+}
+
 // export interface ServerResponse<T> {
 //   info: {
 //     count: number

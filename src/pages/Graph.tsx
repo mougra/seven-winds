@@ -6,8 +6,10 @@ import { IList } from '../models/models'
 import Row from '../components/Row'
 import { modifiedEntity } from '../store/slices/modifiedRowsSlice'
 import { IRows, IRow } from '../models/models'
+import RowCopy from '../components/RowCopy'
+import { rowsAdd } from '../store/slices/entitySlice'
 
-function CMP() {
+function Graph() {
   const dispatch = useAppDispatch()
 
   const { error, loading, lists, rows } = useAppSelector(
@@ -42,9 +44,11 @@ function CMP() {
   useEffect(() => {
     dispatch(fetchEntity())
   }, [])
-
-  // console.log('State', State)
-  // console.log(Array.isArray(State))
+  // useEffect(() => {
+  //   setState(rows)
+  //   console.log('state', state)
+  //   console.log('rows', rows)
+  // }, [rows])
 
   const handleRemoveRow = (rowID: any) => {
     console.log(rowID)
@@ -54,48 +58,37 @@ function CMP() {
     // setRowsState(newData)
   }
 
-  // const handleAddRow = (rowID: number) => {
-  //   let newData: any = {}
-  //   for (let i = 0; i < state.length; i++) {
-  //     if (state[i].row.id === rowID) {
-  //       newData = () => {
-  //         let objCopy = state // 👈️ create copy
-
-  //         objCopy.splice(i + 1, 0, {
-  //           row: {
-  //             id: 0,
-  //             rowName: '',
-  //             salary: 0,
-  //             equipmentCosts: 0,
-  //             overheads: 0,
-  //             estimatedProfit: 0,
-  //             machineOperatorSalary: 0,
-  //             mainCosts: 0,
-  //             materials: 0,
-  //             mimExploitation: 0,
-  //             supportCosts: 0,
-  //             total: 0,
-  //             parentId: rowID,
-  //           },
-  //           level: state[i].level + 1,
-  //           isNew: true,
-  //         })
-
-  //         return objCopy
-  //       }
-  //     }
-  //   }
-  //   // console.log(state, 'state posle')
-  //   setRowIDToEdit(0)
-  //   setIsEditMode(true)
-  //   setState(newData)
-
-  //   // console.log(state, 'state posle')
-  //   // console.log(newData, 'newData')
-  //   // console.log(State, 'State')
-  // }
-
-  // console.log('states', state)
+  const handleAddRow = (rowID: number) => {
+    setIsOpenMode(true)
+    setIsEditMode(true)
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].row.id === rowID) {
+        const objCopy: IRows[] = structuredClone(rows)
+        objCopy.splice(i + 1, 0, {
+          row: {
+            id: 0,
+            rowName: '',
+            salary: 0,
+            equipmentCosts: 0,
+            overheads: 0,
+            parentId: rowID,
+            estimatedProfit: 0,
+            machineOperatorSalary: 0,
+            mainCosts: 0,
+            materials: 0,
+            mimExploitation: 0,
+            supportCosts: 0,
+            total: 0,
+          },
+          level: objCopy[i].level + 1,
+          isNew: true,
+        })
+        // console.log('objCopy', objCopy)
+        dispatch(rowsAdd(objCopy))
+        // setState(objCopy)
+      }
+    }
+  }
 
   return (
     <>
@@ -111,16 +104,13 @@ function CMP() {
         </div>
         {loading && <p className='loading'>Loading...</p>}
         {error && <p className='error'>Error</p>}
-
         {!error && !loading && (
           <div>
             {rows.length > 0 &&
-              rows.map((row: any, index) => (
-                <Row
-                  key={row.id}
+              rows.map((row: IRows) => (
+                <RowCopy
+                  key={row.row.id}
                   row={row}
-                  // level={row.level}
-                  // isNew={row.new}
                   isEditMode={isEditMode}
                   setIsEditMode={setIsEditMode}
                   rowIDToEdit={rowIDToEdit}
@@ -128,7 +118,7 @@ function CMP() {
                   isOpenMode={isOpenMode}
                   setIsOpenMode={setIsOpenMode}
                   handleRemoveRow={handleRemoveRow}
-                  // handleAddRow={handleAddRow}
+                  handleAddRow={handleAddRow}
                 />
               ))}
 
@@ -153,4 +143,4 @@ function CMP() {
   )
 }
 
-export default CMP
+export default Graph
