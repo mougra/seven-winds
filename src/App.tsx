@@ -15,6 +15,7 @@ function App() {
       <div className='app'>
         <Aside />
         <Routes>
+          <Route path='/seven-winds' element={<Graph />} />
           <Route path='/' element={<Graph />} />
           <Route path='/other' element={<Other />} />
           <Route path='/control' element={<Other />} />
