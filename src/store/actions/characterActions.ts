@@ -39,7 +39,6 @@ export const fetchEntity = (isEmpty: boolean) => {
       dispatch(entitySlice.actions.fetchSuccess(responseEntityList.data))
       const rows = Wrap(responseEntityList.data)
       if (responseEntityList.data.length == 0 || isEmpty === true) {
-        console.log('if')
         const responseCreate = await axios.post<any>(
           `/v1/outlay-rows/entity/${eID}/row/create`,
           {
@@ -64,7 +63,6 @@ export const fetchEntity = (isEmpty: boolean) => {
           ])
         )
       } else {
-        console.log('else fetchSuccess')
         dispatch(entitySlice.actions.rowsModified(rows))
       }
     } catch (e) {

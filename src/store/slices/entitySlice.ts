@@ -58,7 +58,6 @@ export const entitySlice = createSlice({
       for (let i = 0; i < state.rows.length; i++) {
         if (state.rows[i].row.id === 0) {
           state.rows[i].row = action.payload
-          console.log('action.payload.id', action.payload.id)
         }
       }
     },

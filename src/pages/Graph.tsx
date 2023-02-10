@@ -16,7 +16,7 @@ function Graph() {
   const [rowIDToEdit, setRowIDToEdit] = useState<number>(0)
 
   useEffect(() => {
-    dispatch(fetchEntity(true))
+    dispatch(fetchEntity(false))
   }, [])
 
   const handleRemoveRow = (rowID: any) => {

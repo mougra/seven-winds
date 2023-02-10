@@ -1,6 +1,6 @@
 .table-main {
   width: calc(100% - 210px);
-
+  font-family: 'Roboto';
   background: #202124;
 
   .h1-title {
@@ -60,7 +60,7 @@
       margin-left: 41px;
     }
     .table-level-container4 {
-      margin-left: 55px;
+      margin-left: 57px;
     }
 
     .table-img1 {
@@ -77,31 +77,27 @@
     }
     .table-img4 {
       height: 16px;
-      margin-left: 62px;
+      margin-left: 64px;
     }
-
+    .table-img5 {
+      height: 16px;
+      margin-left: 80px;
+    }
+    .table-img6 {
+      height: 16px;
+      margin-left: 96px;
+    }
     .table-img0 {
       height: 16px;
       display: block;
       z-index: 3;
     }
-
     .table-namework {
       flex: 650;
     }
-
-    .table-3 {
-      flex: 176 + 24px;
-    }
-
-    .table-4 {
-      flex: 176 + 24px;
-    }
-
-    .table-5 {
-      flex: 176 + 24px;
-    }
-
+    .table-3,
+    .table-4,
+    .table-5,
     .table-6 {
       flex: 176 + 24px;
     }
@@ -112,7 +108,10 @@
     padding: 11px 0 11px 12px;
   }
   .table-info {
-    padding: 11px 0 11px 12px;
+    padding: 21px 0 21px 12px;
+  }
+  .table-info:has(.input) {
+    padding: 12px 0 12px 12px;
   }
 
   .table-info:after,

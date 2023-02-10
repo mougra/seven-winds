@@ -34,8 +34,6 @@ function Row({
   const [rowsState, setRowsState] = useState(row)
   let editedRow: IRows | undefined = rowsState
 
-  console.log(row)
-
   const handleEdit = (rowID: any) => {
     if (isEditMode !== true) {
       setIsEditMode(true)
@@ -95,8 +93,8 @@ function Row({
       <div
         className={
           rowIDToEdit !== rowsState.row.id
-            ? 'table-info'
-            : 'table-info table-info_active'
+            ? `table-info level-${rowsState.level}`
+            : 'table-info '
         }
         onDoubleClick={() => handleEdit(rowsState.row.id)}
       >
