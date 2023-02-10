@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/seven-winds/static/css/main.962d0005.css",
-    "main.js": "/seven-winds/static/js/main.e768dcff.js",
+    "main.js": "/seven-winds/static/js/main.99e574b0.js",
     "static/media/levelDeletesvg.svg": "/seven-winds/static/media/levelDeletesvg.14eb749d6e247b1f14acb3bc4657de15.svg",
     "index.html": "/seven-winds/index.html",
     "static/media/levelDoc.svg": "/seven-winds/static/media/levelDoc.75774930b8d14388d84883b0a647f8e3.svg",
@@ -9,10 +9,10 @@
     "static/media/mainApp.svg": "/seven-winds/static/media/mainApp.11f97507b87f3ac10b1a93209dd21433.svg",
     "static/media/backArrow.svg": "/seven-winds/static/media/backArrow.937d6be56823fddadf07aec5d199d7d2.svg",
     "main.962d0005.css.map": "/seven-winds/static/css/main.962d0005.css.map",
-    "main.e768dcff.js.map": "/seven-winds/static/js/main.e768dcff.js.map"
+    "main.99e574b0.js.map": "/seven-winds/static/js/main.99e574b0.js.map"
   },
   "entrypoints": [
     "static/css/main.962d0005.css",
-    "static/js/main.e768dcff.js"
+    "static/js/main.99e574b0.js"
   ]
 }
