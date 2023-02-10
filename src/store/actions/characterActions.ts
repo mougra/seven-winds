@@ -7,7 +7,6 @@ import { IRows, IRow } from '../../models/models'
 const eID = 33245
 
 export const fetchEntity = () => {
-  console.log('Запрос на серв, получение данных')
   function Wrap(props: IList[]) {
     let level = 0
     let rowsQ: IRows[] = []
@@ -24,7 +23,6 @@ export const fetchEntity = () => {
           level--
         }
       }
-
       return rowsQ
     }
     return rowsQ
@@ -38,12 +36,6 @@ export const fetchEntity = () => {
       const responseEntityList = await axios.get<any>(
         `/v1/outlay-rows/entity/${eID}/row/list`
       )
-
-      // const qwe = await axios.post<any>(
-      //   `/v1/outlay-rows/entity/${eID}/row/create`,
-      //   DATA
-      // )
-      console.log(responseEntityList.data)
       dispatch(entitySlice.actions.fetchSuccess(responseEntityList.data))
       const rows = Wrap(responseEntityList.data)
       dispatch(entitySlice.actions.rowsModified(rows))
@@ -54,8 +46,6 @@ export const fetchEntity = () => {
 }
 
 export const fetchUpdateRow = (DATA: IRow) => {
-  console.log('Запрос на серв, обновление данных')
-
   return async (dispatch: AppDispatch) => {
     try {
       const qwe = await axios.post<any>(
@@ -70,16 +60,26 @@ export const fetchUpdateRow = (DATA: IRow) => {
 }
 
 export const fetchAddRow = (DATA: IRow) => {
-  console.log('Запрос на серв, создание строки')
-
   return async (dispatch: AppDispatch) => {
     try {
       const qwe = await axios.post<any>(
         `/v1/outlay-rows/entity/${eID}/row/create`,
         DATA
       )
-      console.log(qwe.data.current)
       dispatch(entitySlice.actions.rowsNew(qwe.data.current))
+    } catch (e) {
+      dispatch(entitySlice.actions.fetchError(e as Error))
+    }
+  }
+}
+
+export const fetchDeleteRow = (ID: IRow) => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const qwe = await axios.delete<any>(
+        `/v1/outlay-rows/entity/${eID}/row/${ID}/delete`
+      )
+      // dispatch(entitySlice.actions.deleteRow(qwe.data.current))
     } catch (e) {
       dispatch(entitySlice.actions.fetchError(e as Error))
     }

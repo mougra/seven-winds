@@ -4,7 +4,9 @@ import { useState } from 'react'
 import levelDoc from '../assets/levelDoc.svg'
 import levelDeletesvg from '../assets/levelDeletesvg.svg'
 import { fetchUpdateRow } from '../store/actions/characterActions'
-import { useAppDispatch, useAppSelector } from '../hook/redux'
+import { useAppDispatch } from '../hook/redux'
+import { rowsAdd } from '../store/slices/entitySlice'
+import { fetchAddRow } from '../store/actions/characterActions'
 
 interface ModalProps {
   row: IRows
@@ -30,11 +32,11 @@ function Row({
   handleAddRow,
 }: ModalProps) {
   const dispatch = useAppDispatch()
-  // const { newRow } = useAppSelector((state) => state.entity)
 
   const [rowsState, setRowsState] = useState(row)
-  // const [deleteRow, setDeleteRow] = useState(false)
   let editedRow: IRows | undefined = rowsState
+
+  console.log(row)
 
   const handleEdit = (rowID: any) => {
     if (isEditMode !== true) {
@@ -51,7 +53,6 @@ function Row({
   ) => {
     event.preventDefault()
 
-    console.log(rowID)
     let { name: fieldName, value } = event.target
     if (fieldName != 'rowName') {
       value = Number(value)
@@ -59,27 +60,13 @@ function Row({
 
     let rowCopy: IRows = structuredClone(editedRow)
 
-    if (fieldName == 'rowName') {
-      rowCopy.row.rowName = value
-    }
-    if (fieldName == 'salary') {
-      rowCopy.row.salary = value
-    }
-    if (fieldName == 'equipmentCosts') {
-      rowCopy.row.equipmentCosts = value
-    }
-    if (fieldName == 'overheads') {
-      rowCopy.row.overheads = value
-    }
-    if (fieldName == 'estimatedProfit') {
-      rowCopy.row.estimatedProfit = value
-    }
-    // if (rowCopy.row.id === 0) {
-    //   rowCopy.row.id = newRow.id
-    // }
+    if (fieldName == 'rowName') rowCopy.row.rowName = value
+    if (fieldName == 'salary') rowCopy.row.salary = value
+    if (fieldName == 'equipmentCosts') rowCopy.row.equipmentCosts = value
+    if (fieldName == 'overheads') rowCopy.row.overheads = value
+    if (fieldName == 'estimatedProfit') rowCopy.row.estimatedProfit = value
 
     editedRow = rowCopy
-    console.log('editedRow', editedRow)
   }
 
   // const handleCancelEditing = () => {
@@ -95,15 +82,23 @@ function Row({
         return rowsState
       }
       if (editedRow.isNew == true) {
+        if (rowsState.row.id === 0) {
+          dispatch(fetchAddRow(rowsState.row))
+          dispatch(rowsAdd([rowsState]))
+          console.log('dispatch add')
+        }
+        editedRow.row = rowsState.row
         editedRow.isNew = false
       }
+      // else
+      console.log('rowsState.row', rowsState.row)
+      console.log('editedRow.row', editedRow.row)
       dispatch(fetchUpdateRow(editedRow.row))
 
       setRowsState(editedRow)
 
       editedRow = undefined
       setRowIDToEdit(undefined)
-      // setIsEditMode(false)
       setIsOpenMode(true)
     }
   }

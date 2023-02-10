@@ -2,34 +2,60 @@ import React, { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../hook/redux'
 import { fetchEntity } from '../store/actions/characterActions'
 import '../styled/CMPPage.scss'
-import { IList } from '../models/models'
-import Row from '../components/Row'
-import { modifiedEntity } from '../store/slices/modifiedRowsSlice'
-import { IRows, IRow } from '../models/models'
+import { IRows } from '../models/models'
 import RowCopy from '../components/RowCopy'
-import { rowsAdd } from '../store/slices/entitySlice'
-import { fetchUpdateRow, fetchAddRow } from '../store/actions/characterActions'
+import { rowsAdd, deleteRow, isEmpty } from '../store/slices/entitySlice'
+import { fetchDeleteRow, fetchAddRow } from '../store/actions/characterActions'
 
 function Graph() {
   const dispatch = useAppDispatch()
 
-  const { error, loading, lists, rows } = useAppSelector(
-    (state) => state.entity
-  )
+  const isEmptyRow: IRows = {
+    row: {
+      id: 0,
+      rowName: '',
+      salary: 0,
+      equipmentCosts: 0,
+      overheads: 0,
+      parentId: null,
+      estimatedProfit: 0,
+      machineOperatorSalary: 0,
+      mainCosts: 0,
+      materials: 0,
+      mimExploitation: 0,
+      supportCosts: 0,
+      total: 0,
+    },
+    level: 0,
+    isNew: true,
+  }
+
+  const { error, loading, rows } = useAppSelector((state) => state.entity)
   const [isEditMode, setIsEditMode] = useState(false)
   const [isOpenMode, setIsOpenMode] = useState(true)
   const [rowIDToEdit, setRowIDToEdit] = useState<number>(0)
 
   useEffect(() => {
     dispatch(fetchEntity())
+    if (rows.length === 0) {
+      dispatch(isEmpty(isEmptyRow))
+    }
   }, [])
 
   const handleRemoveRow = (rowID: any) => {
-    console.log(rowID)
-    // const newData = rowsState.filter((row: any) => {
-    //   return row.id !== rowID ? row : null
-    // })
-    // setRowsState(newData)
+    let count: number = 1
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].row.id === rowID) {
+        for (let j = i + 1; j < rows.length; j++) {
+          if (rows[i].level < rows[j].level) {
+            count++
+          } else break
+        }
+        dispatch(deleteRow({ i, count }))
+        break
+      }
+    }
+    dispatch(fetchDeleteRow(rowID))
   }
 
   const handleAddRow = (rowID: number) => {
@@ -58,7 +84,6 @@ function Graph() {
           isNew: true,
         })
         dispatch(fetchAddRow(objCopy[i + 1].row))
-
         dispatch(rowsAdd(objCopy))
       }
     }
@@ -95,6 +120,19 @@ function Graph() {
                   handleAddRow={handleAddRow}
                 />
               ))}
+            {rows.length == 0 && (
+              <RowCopy
+                row={isEmptyRow}
+                isEditMode={isEditMode}
+                setIsEditMode={setIsEditMode}
+                rowIDToEdit={rowIDToEdit}
+                setRowIDToEdit={setRowIDToEdit}
+                isOpenMode={isOpenMode}
+                setIsOpenMode={setIsOpenMode}
+                handleRemoveRow={handleRemoveRow}
+                handleAddRow={handleAddRow}
+              />
+            )}
 
             {/* {!Array.isArray(State) && (
               <Row

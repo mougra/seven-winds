@@ -9,6 +9,10 @@ interface ListState {
   rows: IRows[]
   newRow: IRow
 }
+interface deletePayload {
+  i: number
+  count: number
+}
 
 const initialState: ListState = {
   loading: false,
@@ -57,14 +61,12 @@ export const entitySlice = createSlice({
           console.log('action.payload.id', action.payload.id)
         }
       }
-
       // state.newRow = action.payload
     },
     rowUpdate(state: any, action: PayloadAction<IRow>) {
       for (let i = 0; i < state.rows.length; i++) {
         if (state.rows[i].row.id === action.payload.id) {
           state.rows[i].row = action.payload
-          console.log('action.payload.id', action.payload.id)
         }
       }
     },
@@ -72,8 +74,14 @@ export const entitySlice = createSlice({
       state.loading = false
       state.error = action.payload.message
     },
+    deleteRow(state: any, action: PayloadAction<deletePayload>) {
+      state.rows.splice(action.payload.i, action.payload.count)
+    },
+    isEmpty(state: any, action: PayloadAction<IRows>) {
+      state.rows = action.payload
+    },
   },
 })
 
 export default entitySlice.reducer
-export const { rowsAdd } = entitySlice.actions
+export const { rowsAdd, deleteRow, isEmpty } = entitySlice.actions
