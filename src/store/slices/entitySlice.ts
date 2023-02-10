@@ -61,7 +61,6 @@ export const entitySlice = createSlice({
           console.log('action.payload.id', action.payload.id)
         }
       }
-      // state.newRow = action.payload
     },
     rowUpdate(state: any, action: PayloadAction<IRow>) {
       for (let i = 0; i < state.rows.length; i++) {
@@ -77,11 +76,8 @@ export const entitySlice = createSlice({
     deleteRow(state: any, action: PayloadAction<deletePayload>) {
       state.rows.splice(action.payload.i, action.payload.count)
     },
-    isEmpty(state: any, action: PayloadAction<IRows>) {
-      state.rows = action.payload
-    },
   },
 })
 
 export default entitySlice.reducer
-export const { rowsAdd, deleteRow, isEmpty } = entitySlice.actions
+export const { rowsAdd, deleteRow } = entitySlice.actions

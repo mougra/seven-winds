@@ -39,9 +39,9 @@ function CMP() {
   //   return rowsQ
   // }
 
-  useEffect(() => {
-    dispatch(fetchEntity())
-  }, [])
+  // useEffect(() => {
+  //   dispatch(fetchEntity())
+  // }, [])
 
   // console.log('State', State)
   // console.log(Array.isArray(State))

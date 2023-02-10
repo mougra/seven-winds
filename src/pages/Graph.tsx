@@ -4,31 +4,11 @@ import { fetchEntity } from '../store/actions/characterActions'
 import '../styled/CMPPage.scss'
 import { IRows } from '../models/models'
 import RowCopy from '../components/RowCopy'
-import { rowsAdd, deleteRow, isEmpty } from '../store/slices/entitySlice'
+import { rowsAdd, deleteRow } from '../store/slices/entitySlice'
 import { fetchDeleteRow, fetchAddRow } from '../store/actions/characterActions'
 
 function Graph() {
   const dispatch = useAppDispatch()
-
-  const isEmptyRow: IRows = {
-    row: {
-      id: 0,
-      rowName: '',
-      salary: 0,
-      equipmentCosts: 0,
-      overheads: 0,
-      parentId: null,
-      estimatedProfit: 0,
-      machineOperatorSalary: 0,
-      mainCosts: 0,
-      materials: 0,
-      mimExploitation: 0,
-      supportCosts: 0,
-      total: 0,
-    },
-    level: 0,
-    isNew: true,
-  }
 
   const { error, loading, rows } = useAppSelector((state) => state.entity)
   const [isEditMode, setIsEditMode] = useState(false)
@@ -36,10 +16,7 @@ function Graph() {
   const [rowIDToEdit, setRowIDToEdit] = useState<number>(0)
 
   useEffect(() => {
-    dispatch(fetchEntity())
-    if (rows.length === 0) {
-      dispatch(isEmpty(isEmptyRow))
-    }
+    dispatch(fetchEntity(true))
   }, [])
 
   const handleRemoveRow = (rowID: any) => {
@@ -56,6 +33,10 @@ function Graph() {
       }
     }
     dispatch(fetchDeleteRow(rowID))
+
+    if (rows.length - count === 0) {
+      dispatch(fetchEntity(true))
+    }
   }
 
   const handleAddRow = (rowID: number) => {
@@ -105,24 +86,10 @@ function Graph() {
         {error && <p className='error'>Error</p>}
         {!error && !loading && (
           <div>
-            {rows.length > 0 &&
-              rows.map((row: IRows) => (
-                <RowCopy
-                  key={row.row.id}
-                  row={row}
-                  isEditMode={isEditMode}
-                  setIsEditMode={setIsEditMode}
-                  rowIDToEdit={rowIDToEdit}
-                  setRowIDToEdit={setRowIDToEdit}
-                  isOpenMode={isOpenMode}
-                  setIsOpenMode={setIsOpenMode}
-                  handleRemoveRow={handleRemoveRow}
-                  handleAddRow={handleAddRow}
-                />
-              ))}
-            {rows.length == 0 && (
+            {rows.map((row: IRows) => (
               <RowCopy
-                row={isEmptyRow}
+                key={row.row.id}
+                row={row}
                 isEditMode={isEditMode}
                 setIsEditMode={setIsEditMode}
                 rowIDToEdit={rowIDToEdit}
@@ -132,22 +99,7 @@ function Graph() {
                 handleRemoveRow={handleRemoveRow}
                 handleAddRow={handleAddRow}
               />
-            )}
-
-            {/* {!Array.isArray(State) && (
-              <Row
-                row={State}
-                level={0}
-                isEditMode={isEditMode}
-                setIsEditMode={setIsEditMode}
-                rowIDToEdit={rowIDToEdit}
-                setRowIDToEdit={setRowIDToEdit}
-                isOpenMode={isOpenMode}
-                setIsOpenMode={setIsOpenMode}
-                handleRemoveRow={handleRemoveRow}
-                handleAddRow={handleAddRow}
-              />
-            )} */}
+            ))}
           </div>
         )}
       </div>

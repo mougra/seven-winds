@@ -121,21 +121,12 @@ ModalProps) {
         }
         return objCopy
       }
-      // console.log(isNew)
-      // isNew = false
+
       setRowsState(newData)
       setEditedRow(undefined)
       setRowIDToEdit(undefined)
     }
   }
-
-  // console.log(
-  //   isEditMode,
-  //   rowIDToEdit,
-  //   rowsState.row.id,
-  //   row.isNew,
-  //   rowsState.isNew
-  // )
 
   return (
     <>

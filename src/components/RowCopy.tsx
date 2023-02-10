@@ -1,12 +1,10 @@
 import '../styled/CMPPage.scss'
-import { IRow, IRows } from '../models/models'
+import { IRows } from '../models/models'
 import { useState } from 'react'
 import levelDoc from '../assets/levelDoc.svg'
 import levelDeletesvg from '../assets/levelDeletesvg.svg'
 import { fetchUpdateRow } from '../store/actions/characterActions'
 import { useAppDispatch } from '../hook/redux'
-import { rowsAdd } from '../store/slices/entitySlice'
-import { fetchAddRow } from '../store/actions/characterActions'
 
 interface ModalProps {
   row: IRows
@@ -81,18 +79,7 @@ function Row({
       if (editedRow === undefined) {
         return rowsState
       }
-      if (editedRow.isNew == true) {
-        if (rowsState.row.id === 0) {
-          dispatch(fetchAddRow(rowsState.row))
-          dispatch(rowsAdd([rowsState]))
-          console.log('dispatch add')
-        }
-        editedRow.row = rowsState.row
-        editedRow.isNew = false
-      }
-      // else
-      console.log('rowsState.row', rowsState.row)
-      console.log('editedRow.row', editedRow.row)
+      editedRow.isNew = false
       dispatch(fetchUpdateRow(editedRow.row))
 
       setRowsState(editedRow)
@@ -113,7 +100,7 @@ function Row({
         }
         onDoubleClick={() => handleEdit(rowsState.row.id)}
       >
-        {!isOpenMode && !isEditMode ? (
+        {!isOpenMode && !isEditMode && !rowsState.isNew ? (
           <div className='table-level'>
             <div
               className={`table-level-container${row.level}`}
