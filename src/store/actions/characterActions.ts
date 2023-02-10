@@ -6,7 +6,7 @@ import { IRows, IRow } from '../../models/models'
 
 const eID = 33245
 
-export const fetchEntity = () => {
+export const fetchEntity = (isEmpty: boolean) => {
   function Wrap(props: IList[]) {
     let level = 0
     let rowsQ: IRows[] = []
@@ -38,7 +38,33 @@ export const fetchEntity = () => {
       )
       dispatch(entitySlice.actions.fetchSuccess(responseEntityList.data))
       const rows = Wrap(responseEntityList.data)
-      dispatch(entitySlice.actions.rowsModified(rows))
+      if (responseEntityList.data.length == 0 || isEmpty === true) {
+        const responseCreate = await axios.post<any>(
+          `/v1/outlay-rows/entity/${eID}/row/create`,
+          {
+            id: 0,
+            rowName: '',
+            salary: 0,
+            equipmentCosts: 0,
+            overheads: 0,
+            parentId: null,
+            estimatedProfit: 0,
+            machineOperatorSalary: 0,
+            mainCosts: 0,
+            materials: 0,
+            mimExploitation: 0,
+            supportCosts: 0,
+            total: 0,
+          }
+        )
+        dispatch(
+          entitySlice.actions.rowsAdd([
+            { row: responseCreate.data.current, level: 0, isNew: true },
+          ])
+        )
+      } else {
+        dispatch(entitySlice.actions.rowsModified(rows))
+      }
     } catch (e) {
       dispatch(entitySlice.actions.fetchError(e as Error))
     }
@@ -79,7 +105,6 @@ export const fetchDeleteRow = (ID: IRow) => {
       const qwe = await axios.delete<any>(
         `/v1/outlay-rows/entity/${eID}/row/${ID}/delete`
       )
-      // dispatch(entitySlice.actions.deleteRow(qwe.data.current))
     } catch (e) {
       dispatch(entitySlice.actions.fetchError(e as Error))
     }
