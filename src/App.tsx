@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound'
 import Aside from './components/Aside'
 import Other from './pages/Other'
 import Graph from './pages/Graph'
+import CMPpage from './pages/CMPPage'
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <Aside />
         <Routes>
           <Route path='/seven-winds' element={<Graph />} />
-          <Route path='/' element={<Graph />} />
+          <Route path='/' element={<CMPpage />} />
           <Route path='/other' element={<Other />} />
           <Route path='/control' element={<Other />} />
           <Route path='*' element={<NotFound />} />

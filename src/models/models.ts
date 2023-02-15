@@ -38,6 +38,10 @@ export interface IRows {
   level: number
   isNew?: boolean
 }
+export interface ILists {
+  row: IList
+  level: number
+}
 
 // export interface ServerResponse<T> {
 //   info: {
